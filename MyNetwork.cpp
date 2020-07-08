@@ -1,14 +1,11 @@
-#pragma once
-#include"ThreadPool.h"
-#include"Task.h"
-#include"MyNetwork.h"
-#include"pch.h"
-#include"CheckOS.h"
+#include "ThreadPool.h"
+#include "Task.h"
+#include "MyNetwork.h"
+#include "pch.h"
 
-#ifdef I_OS_WIN32
-
-void InitWSA()
+void MyNetwork::InitWSA()
 {
+#ifdef I_OS_WIN32
 	WORD w_req = MAKEWORD(2, 2);//版本号
 	WSADATA wsadata;
 	int err;
@@ -28,11 +25,10 @@ void InitWSA()
 		std::cout << "套接字库版本正确！" << std::endl;
 	}
 	//填充服务端地址信息
+#endif
 }
 
-#endif // 
-
-int Socket(int family, int type, int protocol)
+int MyNetwork::Socket(int family, int type, int protocol)
 {
 	int code;
 	if ((code = socket(family, type, protocol)) < 0)
@@ -42,7 +38,7 @@ int Socket(int family, int type, int protocol)
 	return code;
 }
 
-void Bind(int listenfd,SA *servaddr, socklen_t size)
+void MyNetwork::Bind(int listenfd, SA *servaddr, socklen_t size)
 {
 	int code;
 	if ((code=bind(listenfd, servaddr, size) )!= 0)//注意与标准库bind做区分
@@ -51,7 +47,7 @@ void Bind(int listenfd,SA *servaddr, socklen_t size)
 	}
 }
 
-void Listen(int listenfd,int max)
+void MyNetwork::Listen(int listenfd,int max)
 {
 	int code;
 	if ((code=listen(listenfd, max)) != 0)
@@ -60,7 +56,7 @@ void Listen(int listenfd,int max)
 	}
 }
 
-int Accept(SOCKET listenfd,SA *servaddr, socklen_t* len)
+int MyNetwork::Accept(int listenfd,SA *servaddr, socklen_t* len)
 {
 	int code;
 	if ((code=accept(listenfd,servaddr,len)) < 0)
@@ -70,16 +66,12 @@ int Accept(SOCKET listenfd,SA *servaddr, socklen_t* len)
 	return code;
 }
 
-void showinfo(int connfd,char recvline[],std::string &t)//用于显示交互信息
+void Session::showinfo(int connfd,char recvline[],std::string &t)//用于显示交互信息
 {
 	std::cout << "接收到来自 id:" << connfd << " 的信息" << recvline << std::endl;
 	std::cout << "请输入回复给 id:" << connfd << " 的信息\n";
 	std::cin >> t;
-
 }
-
-
-
 
 MyNetwork::MyNetwork(int listen) :m_stop(false), m_listenNum(listen)
 {
@@ -105,7 +97,6 @@ MyNetwork::~MyNetwork()
 #endif
 }
 
-
 void MyNetwork::Run()
 {
 	const int testthead = 2;
@@ -130,9 +121,6 @@ void MyNetwork::Run()
 #endif
 }
 
-
-
-
 void Session::Run()
 {
 	std::unique_ptr<char[]> recvline(new char[m_n]);
@@ -150,7 +138,11 @@ void Session::Run()
 		std::string t;
 		showinfo(m_connfd,recvline.get(),t);
 		int sendlen=t.length();
+#ifndef I_OS_LINUX
 		strcpy_s(sendline.get(), m_n, t.c_str());
+#else
+		strncpy(sendline.get(), t.c_str(), m_n);
+#endif
 		int send_len = send(m_connfd, sendline.get(), sendlen, 0);
 		if (send_len < 0)
 		{

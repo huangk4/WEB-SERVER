@@ -1,8 +1,5 @@
 #pragma once
 
-
-
-
 class Task
 {
 public:
@@ -12,8 +9,6 @@ public:
 protected:
 	void *m_pdata;
 };
-
-
 
 class TestTask :public Task
 {
