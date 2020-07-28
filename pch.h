@@ -1,18 +1,8 @@
 #pragma once
 
-#include <queue>
-#include <string>
-#include <thread>
-#include <mutex>
-#include <queue>
-#include <iostream>
-#include <functional>
-#include <cstdlib>
-#include <cstring>
-#include <list>
 #include "CheckOS.h"
-#include <chrono>
-#include <condition_variable>
+#include <iostream>
+
 #ifdef I_OS_WIN32
 #define WIN32_LEAN_AND_MEAN
 #include <ws2tcpip.h>
@@ -26,12 +16,13 @@
 #include <netinet/in.h>
 #include <sys/types.h>
 #include <unistd.h>
+#include <arpa/inet.h>
 #endif
 
 
-inline void print_err(std::string error, int code)
+inline void print_err(std::string strError, int nCode)
 {
-	std::cout << error << std::endl;
-	std::cout << "é”™è¯¯ä»£ç ä¸ºï¼š" << code << std::endl;
+	std::cout << strError << std::endl;
+	std::cout << "´íÎó´úÂëÎª:" << nCode << std::endl;
 	exit(1);
 }

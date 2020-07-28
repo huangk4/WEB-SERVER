@@ -1,7 +1,0 @@
-# ninja log v5
-0	809	615720072	CMakeFiles/NetServer.dir/Task.cpp.obj	ecdcbd7ddc361a4a
-13	811	615720072	CMakeFiles/NetServer.dir/pch.cpp.obj	76d2953904758c72
-18	826	615720072	CMakeFiles/NetServer.dir/main.cpp.obj	7299745f6e93071
-9	839	615720072	CMakeFiles/NetServer.dir/MyNetwork.cpp.obj	bc05aa7407386d27
-5	867	615720072	CMakeFiles/NetServer.dir/ThreadPool.cpp.obj	65f716b98e40e1da
-867	1264	615720072	NetServer.exe	144fddea3762d8dd
